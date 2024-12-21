@@ -1,3 +1,5 @@
+const selfClosingTags = new Set(["meta", "img", "input", "link", "br", "hr"]);
+
 const getHTML = async () => {
   return await fetch("/");
 };
@@ -106,7 +108,10 @@ const buildDOMTree = (tokens) => {
       const node = createNode(token);
       if (node) {
         stack[stack.length - 1].children.push(node); // 부모에 추가
-        stack.push(node);
+
+        if (!selfClosingTags.has(token.tagName)) {
+          stack.push(node); // Self-closing 태그가 아니면 스택에 추가
+        }
       }
     } else if (token.type === "closing-tag") {
       stack.pop();
