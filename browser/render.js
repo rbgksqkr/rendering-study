@@ -30,7 +30,7 @@ async function buildRenderTree(cssOM) {
   }
 
   const result = applyStyles(domTree);
-  console.log(result);
+  console.log("직접 구현한 렌더 트리:", result);
 }
 
 // Render Tree 생성 및 출력
