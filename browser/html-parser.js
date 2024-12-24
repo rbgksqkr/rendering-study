@@ -1,4 +1,5 @@
 const selfClosingTags = new Set(["meta", "img", "input", "link", "br", "hr"]);
+let domTree = null;
 
 const getHTML = async () => {
   return await fetch("/");
@@ -123,7 +124,7 @@ const buildDOMTree = (tokens) => {
     }
   });
 
-  return root.children; // 최종 DOM 트리 반환
+  return root.children[0]; // 최종 DOM 트리 반환
 };
 
 // 5. DOM 트리 출력
@@ -141,10 +142,13 @@ const printDOMTree = (nodes, depth = 0) => {
   });
 };
 
-decodeHTML().then((htmlString) => {
-  if (htmlString) {
-    const tokens = tokenizeHTML(htmlString);
-    const domTree = buildDOMTree(tokens);
-    printDOMTree(domTree);
-  }
-});
+const getDOMTree = async () => {
+  const htmlString = await decodeHTML();
+
+  if (htmlString === null) return;
+
+  const tokens = tokenizeHTML(htmlString);
+  return buildDOMTree(tokens);
+};
+
+export default getDOMTree;
